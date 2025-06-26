@@ -1,0 +1,8 @@
+# Conventions:
+- Complexity is the enemy. Avoid complexity.
+- Use simple, verbose code that is easy to understand and maintain, instead of dense, terse code.
+- Use functional programming principles. Avoid object-oriented programming.
+- Always update the README.md file.
+
+**Important** 
+Maintain a Progress.md file which highlights the conversation and progress history's key point
