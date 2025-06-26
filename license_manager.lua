@@ -334,9 +334,14 @@ function manager.print_license(license, options)
     end
     
     if license.metadata and next(license.metadata) then
-        print("  Metadata:")
-        for k, v in pairs(license.metadata) do
-            print("    " .. k .. ": " .. tostring(v))
+        if options.show_metadata == false then
+            print("  Metadata: [HIDDEN - use show_metadata option to display]")
+        else
+            -- Show metadata if show_metadata is true or not specified (default behavior)
+            print("  Metadata:")
+            for k, v in pairs(license.metadata) do
+                print("    " .. k .. ": " .. tostring(v))
+            end
         end
     end
 end

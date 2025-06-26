@@ -171,7 +171,65 @@ luarocks install lua-cjson  # Already implemented
 
 ---
 
-## 🎯 **Latest Update: Enhanced Demo & Bug Fixes (2025-01-26)**
+## 🐛 **Bug Fix: Display Options Handling (2025-01-26)**
+
+### Issue Identified
+- **Problem**: `print_license()` function ignored `show_metadata` option parameter
+- **Impact**: Metadata was always displayed regardless of `{show_metadata = false}` setting
+- **Inconsistency**: `quick_demo.lua` was passing options but they weren't respected
+
+### Root Cause Analysis
+```lua
+# Before Fix - Always showed metadata
+if license.metadata and next(license.metadata) then
+    print("  Metadata:")
+    for k, v in pairs(license.metadata) do
+        print("    " .. k .. ": " .. tostring(v))
+    end
+end
+```
+
+### Solution Implemented
+```lua
+# After Fix - Respects show_metadata option
+if license.metadata and next(license.metadata) then
+    if options.show_metadata == false then
+        print("  Metadata: [HIDDEN - use show_metadata option to display]")
+    else
+        -- Show metadata if show_metadata is true or not specified (default behavior)
+        print("  Metadata:")
+        for k, v in pairs(license.metadata) do
+            print("    " .. k .. ": " .. tostring(v))
+        end
+    end
+end
+```
+
+### Verification Testing
+- ✅ **`show_metadata = false`**: Displays "Metadata: [HIDDEN - use show_metadata option to display]"
+- ✅ **`show_metadata = true`**: Shows full metadata with all key-value pairs
+- ✅ **Default behavior**: Shows metadata (backward compatible)
+- ✅ **Consistency**: All `quick_demo.lua` calls now work as expected
+
+### Call Pattern Consistency
+**Table Views** (summary format):
+```lua
+lm.print_licenses_table(licenses, {show_value = false, show_metadata = false})
+```
+
+**Detailed Views** (full information):
+```lua
+lm.print_license(license, {show_value = false, show_metadata = true})
+```
+
+### Impact
+- **User Experience**: Proper control over metadata display
+- **Demo Clarity**: Clean table views vs detailed individual views
+- **API Consistency**: Options parameters now function as documented
+
+---
+
+## 🎯 **Enhanced Demo & Performance (2025-01-26)**
 
 ### Issue Resolution
 - **Problem**: Crypto fallback implementation had string.char range errors
